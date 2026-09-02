@@ -1,0 +1,42 @@
+{
+  "manifest_version": 3,
+  "name": "Anubis Wasm PoW Accelerator",
+  "version": "0.1.0",
+  "description": "Accelerates supported Anubis proof-of-work challenges with WebAssembly SIMD.",
+  "minimum_chrome_version": "152",
+  "permissions": ["offscreen"],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "page-guard.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": false,
+      "world": "MAIN"
+    },
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "lib/page-adapter.js",
+        "content.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": false,
+      "world": "ISOLATED"
+    }
+  ]
+}
